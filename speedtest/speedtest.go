@@ -17,7 +17,7 @@ const UrlTestStandard_FisrtHandshake = 2
 
 var errNoRedir = errors.New("no redir")
 
-func UrlTest(client *http.Client, link string, timeout int32, standard int) (int32, error) {
+func UrlTest(client *http.Client, link string, timeout int32, standard int, userAgent string) (int32, error) {
 	if client == nil {
 		return 0, fmt.Errorf("no client")
 	}
@@ -51,6 +51,9 @@ func UrlTest(client *http.Client, link string, timeout int32, standard int) (int
 	req, err := http.NewRequestWithContext(ctx, "GET", link, nil)
 	if err != nil {
 		return 0, err
+	}
+	if userAgent != "" {
+		req.Header.Set("User-Agent", userAgent)
 	}
 
 	trace := &httptrace.ClientTrace{
